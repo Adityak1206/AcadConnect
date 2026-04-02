@@ -1,0 +1,40 @@
+{
+  "name": "user-service",
+  "version": "1.0.0",
+  "description": "AcadConnect User Service — Auth, profiles, admin eligibility",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "migrate": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:status": "knex migrate:status",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --runInBand --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/src/__tests__/**/*.test.js"
+    ],
+    "globalSetup": "./src/__tests__/globalSetup.js",
+    "globalTeardown": "./src/__tests__/globalTeardown.js",
+    "testTimeout": 30000
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "mongoose": "^8.3.4",
+    "pg": "^8.11.5",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.2.2"
+  }
+}

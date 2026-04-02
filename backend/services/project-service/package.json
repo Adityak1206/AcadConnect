@@ -1,0 +1,33 @@
+{
+  "name": "project-service",
+  "version": "1.0.0",
+  "description": "AcadConnect Project Service — Projects, snippets, requests, milestones",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --runInBand --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": ["**/src/__tests__/**/*.test.js"],
+    "globalSetup": "./src/__tests__/globalSetup.js",
+    "globalTeardown": "./src/__tests__/globalTeardown.js",
+    "testTimeout": 30000
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.11.5",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.2.2"
+  }
+}
