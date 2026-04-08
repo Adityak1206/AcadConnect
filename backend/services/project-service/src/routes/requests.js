@@ -6,6 +6,23 @@ const { createError } = require('../utils/errors');
 
 const router = express.Router();
 
+const AI_FEEDBACK_URL = process.env.AI_FEEDBACK_SERVICE_URL || 'http://localhost:8001';
+
+/**
+ * Fires a non-blocking request to the AI Feedback Service.
+ * Errors are swallowed — a downed AI service must never affect the main API.
+ */
+const triggerFeedback = (payload) => {
+  fetch(`${AI_FEEDBACK_URL}/feedback/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }).catch((err) => {
+    console.warn('[project-service] AI Feedback trigger failed (non-fatal):', err.message);
+  });
+};
+
+
 /**
  * POST /api/requests
  * Submit a mentorship request. Student only. Must be leader of a group
@@ -181,6 +198,40 @@ router.put('/:id/status', authenticate, authorize('faculty'), async (req, res, n
     });
 
     res.status(200).json({ message: `Request successfully ${status}` });
+
+    // ── Trigger AI Feedback (fire-and-forget) ─────────────────────
+    // Only trigger on acceptance. Fetch the snippet + project data outside
+    // the now-committed transaction so the feedback call is truly non-blocking.
+    if (status === 'accepted') {
+      try {
+        const fullReq = await db('project_requests as pr')
+          .join('projects as p', 'pr.project_id', 'p.id')
+          .select(
+            'pr.id as request_id',
+            'pr.group_id',
+            'pr.snippet',
+            'p.id as project_id',
+            'p.title as project_title',
+            'p.description as project_description'
+          )
+          .where('pr.id', reqId)
+          .first();
+
+        if (fullReq) {
+          triggerFeedback({
+            request_id: fullReq.request_id,
+            group_id: fullReq.group_id,
+            project_id: fullReq.project_id,
+            snippet: fullReq.snippet,
+            project_title: fullReq.project_title,
+            project_description: fullReq.project_description,
+          });
+        }
+      } catch (triggerErr) {
+        console.warn('[project-service] Could not build AI feedback payload:', triggerErr.message);
+      }
+    }
+
   } catch (err) {
     next(err);
   }
