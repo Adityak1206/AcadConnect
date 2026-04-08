@@ -16,7 +16,7 @@ module.exports = {
       database: process.env.POSTGRES_DB || 'acadconnect',
     },
     migrations: {
-      directory: './src/migrations',
+      directory: './src/db/migrations',
       tableName: 'knex_migrations',
     },
     pool: { min: 2, max: 10 },
