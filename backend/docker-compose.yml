@@ -58,6 +58,32 @@ services:
       mongo:
         condition: service_healthy
 
+  recommendation-service:
+    image: python:3.12-slim
+    container_name: acadconnect-recommendation
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./services/recommendation-service:/app
+    command: >
+      sh -c "pip install -r requirements.txt -q &&
+             uvicorn main:app --host 0.0.0.0 --port 8002"
+    env_file: .env
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      PINECONE_API_KEY: ${PINECONE_API_KEY}
+      PINECONE_INDEX_NAME: ${PINECONE_INDEX_NAME:-acadconnect-faculty}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - '8002:8002'
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   postgres_data:
   mongo_data:

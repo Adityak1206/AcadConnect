@@ -17,7 +17,7 @@ from fastapi.responses import JSONResponse
 
 from db import get_feedback_collection, close_client
 from feedback import generate_feedback
-from models import FeedbackRequest, FeedbackCreatedResponse, FeedbackResponse
+from models import FeedbackRequest, FeedbackCreatedResponse, FeedbackResponse, FeedbackSyncRequest, FeedbackSyncResponse
 
 load_dotenv()
 
@@ -66,7 +66,6 @@ async def generate(payload: FeedbackRequest):
     # Call OpenAI
     try:
         ai_result = await generate_feedback(
-            snippet=payload.snippet,
             project_title=payload.project_title,
             project_description=payload.project_description,
         )
@@ -119,6 +118,28 @@ async def get_feedback(request_id: str):
         summary=doc["summary"],
         created_at=doc["created_at"],
     )
+
+
+@app.post("/feedback/generate-sync", response_model=FeedbackSyncResponse)
+async def generate_sync(payload: FeedbackSyncRequest):
+    """
+    Accepts a student project title and description, generates AI feedback,
+    and returns it immediately without persisting to MongoDB.
+    """
+    try:
+        ai_result = await generate_feedback(
+            project_title=payload.project_title,
+            project_description=payload.project_description,
+        )
+        return FeedbackSyncResponse(
+            relevance_score=ai_result["relevance_score"],
+            strengths=ai_result["strengths"],
+            gaps=ai_result["gaps"],
+            suggestions=ai_result["suggestions"],
+            summary=ai_result["summary"],
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"OpenAI call failed: {str(e)}")
 
 
 # ─── Local Dev Entry Point ──────────────────────────────────────────

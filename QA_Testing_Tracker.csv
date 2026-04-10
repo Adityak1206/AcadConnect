@@ -1,0 +1,13 @@
+Step Number,Action,Entity Name / Target,Expected Result,Actual Status (Pass/Fail),Captured Data (Tokens / IDs),Additional Notes
+1,Create Student 1 (Group Leader),Alex Student,201 Created,,[TOKEN= ] [ID= ],
+2,Create Student 2 (Member),Jordan Student,201 Created,,[TOKEN= ] [Email= ],
+3,Create Faculty,Dr. Smith,201 Created,,[TOKEN= ] [ID= ],
+4,Add Faculty Research Areas,Dr. Smith,200 OK (Profile updated),,,
+5,Sync Recommendation Service,System Backend,200 OK (Synced faculty data),,,
+6,Create Student Group,Alex Student,201 Created,,[Group ID= ],
+7,Accept Group Invite,Jordan Student,200 OK,,,
+8,Create Project,Alex Student,201 Created,,[Project ID= ],
+9,Get Real-Time AI Feedback,Alex Student,200 OK (Structured JSON schema analyzing pitch),,,
+10,Get Faculty Recommendations,Alex Student,200 OK (Dr. Smith identified as match),,,
+11,Send Pitch Request to Faculty,Alex Student,201 Created,,[Request ID= ],
+12,Accept Request,Dr. Smith,200 OK,,,

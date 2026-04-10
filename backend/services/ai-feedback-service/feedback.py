@@ -11,8 +11,8 @@ load_dotenv()
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 SYSTEM_PROMPT = """
-You are an academic mentor evaluating a student group's application snippet for a faculty research project.
-Your job is to provide honest, constructive, structured feedback.
+You are an academic mentor evaluating a student group's proposed research project correctly formatted by title and description.
+Your job is to provide honest, constructive, structured feedback on their pitch, highlighting if it's clear, technically sound, and well scoped for an academic setting.
 
 Always respond with ONLY a valid JSON object with exactly these fields:
 {
@@ -24,16 +24,15 @@ Always respond with ONLY a valid JSON object with exactly these fields:
 }
 
 Guidelines:
-- relevance_score: How well the snippet aligns with the project (1=no alignment, 10=perfect fit)
-- strengths: What the application does well (2-4 items)
-- gaps: Missing skills, experience, or clarity (1-4 items)
-- suggestions: Concrete advice for improving the application or skill set (2-4 items)
+- relevance_score: The overall quality and viability of the project (1=very poor, 10=excellent)
+- strengths: What the proposed project outlines well (2-4 items)
+- gaps: Missing clarity, scope definition, or fundamental requirements (1-4 items)
+- suggestions: Concrete advice for improving the project proposal (2-4 items)
 - summary: A balanced, professional summary suitable for the student to read
 """
 
 
 async def generate_feedback(
-    snippet: str,
     project_title: str,
     project_description: str,
 ) -> dict:
@@ -44,9 +43,6 @@ async def generate_feedback(
     user_message = f"""
 PROJECT TITLE: {project_title}
 PROJECT DESCRIPTION: {project_description}
-
-STUDENT APPLICATION SNIPPET:
-{snippet}
 """
 
     response = await client.chat.completions.create(

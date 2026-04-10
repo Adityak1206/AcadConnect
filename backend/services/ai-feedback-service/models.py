@@ -31,3 +31,14 @@ class FeedbackResponse(BaseModel):
 class FeedbackCreatedResponse(BaseModel):
     feedback_id: str
     status: str = "generated"
+
+class FeedbackSyncRequest(BaseModel):
+    project_title: str
+    project_description: str
+
+class FeedbackSyncResponse(BaseModel):
+    relevance_score: int
+    strengths: list[str]
+    gaps: list[str]
+    suggestions: list[str]
+    summary: str
