@@ -1,0 +1,35 @@
+{
+  "STUDENT_1": {
+    "name": "Alex Student",
+    "email": "alex@acadconnect.test",
+    "id": "24224475-047d-4c0c-943d-af71f9206bf2",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI0MjI0NDc1LTA0N2QtNGMwYy05NDNkLWFmNzFmOTIwNmJmMiIsImVtYWlsIjoiYWxleEBhY2FkY29ubmVjdC50ZXN0Iiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE3NzYyODc4ODEsImV4cCI6MTc3Njg5MjY4MX0.f7iPOWdCn8Q5LvrLyemuDzuW7wEofl2Ugihm8V39Z4M"
+  },
+  "STUDENT_2": {
+    "name": "Jordan Student",
+    "email": "jordan@acadconnect.test",
+    "id": "fab389e4-d338-411f-bac6-07d0e16e0472",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZhYjM4OWU0LWQzMzgtNDExZi1iYWM2LTA3ZDBlMTZlMDQ3MiIsImVtYWlsIjoiam9yZGFuQGFjYWRjb25uZWN0LnRlc3QiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc3NjI4NzkzMywiZXhwIjoxNzc2ODkyNzMzfQ.a6lO7q5l9x4MP--y2lE91EHiMdWA7KX3Q43KhDm9w9M"
+  },
+  "FACULTY_1": {
+    "name": "Dr. Smith",
+    "email": "smith@acadconnect.test",
+    "id": "ce353f3c-9a02-46de-b5e1-4e43270d2608",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNlMzUzZjNjLTlhMDItNDZkZS1iNWUxLTRlNDMyNzBkMjYwOCIsImVtYWlsIjoic21pdGhAYWNhZGNvbm5lY3QudGVzdCIsInJvbGUiOiJmYWN1bHR5IiwiaWF0IjoxNzc2Mjg3OTcyLCJleHAiOjE3NzY4OTI3NzJ9.s9Je0OjxEEZLEqbGrxSMp0irtymoNJ7U_qBngMGucRo"
+  },
+  "STUDENT_3": {
+    "name": "Rishabh Student",
+    "email": "rishabh@acadconnect.test",
+    "id": "09baf206-48ba-4111-8923-84ab679b0066",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA5YmFmMjA2LTQ4YmEtNDExMS04OTIzLTg0YWI2NzliMDA2NiIsImVtYWlsIjoicmlzaGFiaEBhY2FkY29ubmVjdC50ZXN0Iiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE3NzYyODgzNTgsImV4cCI6MTc3Njg5MzE1OH0.WAyFS8p_lbnDU6DZye_Ag2A-bD94DsEOPSBWYMe1riU"
+  },
+  "STUDENT_4": {
+    "name": "Aditya Student",
+    "email": "aditya@acadconnect.test",
+    "id": "d6b43db2-9319-44e4-8d24-9f326312f053",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQ2YjQzZGIyLTkzMTktNDRlNC04ZDI0LTlmMzI2MzEyZjA1MyIsImVtYWlsIjoiYWRpdHlhQGFjYWRjb25uZWN0LnRlc3QiLCJyb2xlIjoic3R1ZGVudCIsImlhdCI6MTc3NjI4ODM4MSwiZXhwIjoxNzc2ODkzMTgxfQ.I6Lp6m1wqjgMvBzVWnQBbDDdPEH_tkoQtaKRSbpl8xA"
+  },
+  "GROUP_ID": "529a01e4-ed0e-4731-9227-1a52e0136e6e",
+  "PROJECT_ID": "e24bff31-a817-43a7-b523-ae5dc65bed22",
+  "REQUEST_ID": "03f15c7a-1515-4bf8-b1be-13fa40023b75"
+}

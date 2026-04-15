@@ -56,13 +56,19 @@ router.post('/', authenticate, authorize('student'), async (req, res, next) => {
       .first();
     if (existing) throw createError(409, 'Your group has already submitted a request to this faculty');
 
-    // 5. Insert Request
+    // 5. Insert Request and Advance Milestone
     const requestId = uuidv4();
-    await db('project_requests').insert({
-      id: requestId,
-      project_id,
-      faculty_id,
-      status: 'pending',
+    await db.transaction(async (trx) => {
+      await trx('project_requests').insert({
+        id: requestId,
+        project_id,
+        faculty_id,
+        status: 'pending',
+      });
+      await trx('projects').where({ id: project_id }).update({ 
+        status: 'faculty_review', 
+        updated_at: trx.fn.now() 
+      });
     });
 
     res.status(201).json({
@@ -167,8 +173,8 @@ router.put('/:id/status', authenticate, authorize('faculty'), async (req, res, n
         // 2. Mark this request accepted
         await trx('project_requests').where({ id: reqId }).update({ status: 'accepted', updated_at: trx.fn.now() });
 
-        // 3. Mark the project as in_progress
-        await trx('projects').where({ id: pr.project_id }).update({ status: 'in_progress', updated_at: trx.fn.now() });
+        // 3. Mark the project as active_research
+        await trx('projects').where({ id: pr.project_id }).update({ status: 'active_research', updated_at: trx.fn.now() });
 
         // 4. Group is fully booked - reject all their other pending requests out to the world
         await trx('project_requests')

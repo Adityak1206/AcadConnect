@@ -94,12 +94,12 @@ router.post('/', authenticate, authorize('student'), async (req, res, next) => {
       group_id: group_id,
       title,
       description,
-      status: 'open',
+      status: 'proposal_drafting',
     });
 
     res.status(201).json({
       message: 'Project created successfully',
-      project: { id: projectId, title, group_id, status: 'open' },
+      project: { id: projectId, title, group_id, status: 'proposal_drafting' },
     });
   } catch (err) {
     next(err);
@@ -138,6 +138,49 @@ router.post('/:id/ai-feedback', authenticate, authorize('student'), async (req, 
     res.status(200).json(aiData);
   } catch (err) {
     console.error('[project-service] AI Feedback Error:', err);
+    next(err);
+  }
+});
+
+/**
+ * PUT /api/projects/:id/milestone
+ * Advances the project milestone manually.
+ * Allows students to progress to final_submission, and faculty to mark as completed.
+ * Body: { status: 'midpoint_submission' | 'final_submission' | 'completed' }
+ */
+router.put('/:id/milestone', authenticate, async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    const project = await db('projects').where({ id: req.params.id }).first();
+    if (!project) throw createError(404, 'Project not found');
+
+    const validMilestones = ['proposal_drafting', 'faculty_review', 'active_research', 'midpoint_submission', 'final_submission', 'completed'];
+    if (!validMilestones.includes(status)) throw createError(400, 'Invalid milestone');
+
+    const isStudent = req.user.role === 'student';
+    const isFaculty = req.user.role === 'faculty';
+
+    if (isStudent) {
+      // student can only change if they are group leader
+      const group = await db('groups').where({ id: project.group_id }).first();
+      if (group.leader_id !== req.user.id) throw createError(403, 'Only group leader can advance milestones');
+      if (status === 'completed') throw createError(403, 'Students cannot mark a project as completed');
+      
+      // Prevent regression to earlier states manually via this endpoint (handled programmatically by requests instead)
+      if (['proposal_drafting', 'faculty_review', 'active_research'].includes(status)) {
+        throw createError(400, `Students cannot manually regress or advance to ${status} via this endpoint`);
+      }
+    } else if (isFaculty) {
+      // check if faculty is official mentor (accepted request)
+      const mentor = await db('project_requests').where({ project_id: project.id, faculty_id: req.user.id, status: 'accepted' }).first();
+      if (!mentor) throw createError(403, 'Only the designated faculty mentor can advance this project');
+    } else {
+       throw createError(403, 'Unauthorized');
+    }
+
+    await db('projects').where({ id: project.id }).update({ status, updated_at: db.fn.now() });
+    res.status(200).json({ message: `Project milestone advanced to ${status}` });
+  } catch (err) {
     next(err);
   }
 });
